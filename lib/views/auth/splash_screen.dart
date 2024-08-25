@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await authViewModel.checkAuthStatus();
       if (authViewModel.isLoggedIn) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/habitlist');
       } else {
         Navigator.pushReplacementNamed(context, '/login');
       }

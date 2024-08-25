@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:habit_tracker/viewmodels/auth_viewmodel.dart';
-import 'package:habit_tracker/views/home_page.dart';
+import 'package:habit_tracker/viewmodels/habit_viewmodel.dart';
+import 'package:habit_tracker/views/auth/splash_screen.dart';
 import 'package:habit_tracker/views/auth/login_page.dart';
 import 'package:habit_tracker/views/auth/signup_page.dart';
-import 'package:habit_tracker/views/auth/splash_screen.dart';
+import 'package:habit_tracker/views/habitlist_page.dart';
+import 'package:habit_tracker/views/home_page.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -16,15 +18,20 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthViewModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => HabitViewModel()),
+      ],
       child: MaterialApp(
-        initialRoute: '/splash',
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
         routes: {
-          '/splash': (context) => SplashScreen(),
+          '/': (context) => SplashScreen(),
           '/login': (context) => LoginPage(),
           '/signup': (context) => SignUpPage(),
           '/home': (context) => HomePage(),
+          '/habitlist': (context) => HabitListPage(),
         },
       ),
     );
