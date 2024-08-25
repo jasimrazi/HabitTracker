@@ -42,12 +42,22 @@ class HabitViewModel with ChangeNotifier {
     }
   }
 
+  List<Habit> getHabitsForDate(DateTime date) {
+    return _habits.where((habit) {
+      final habitDate = habit.createdAt;
+      return habitDate.year == date.year &&
+          habitDate.month == date.month &&
+          habitDate.day == date.day;
+    }).toList();
+  }
+
   // Add a new habit to Firestore
   Future<void> addHabit(String name) async {
     try {
       final newHabit = Habit(
         id: DateTime.now().toString(),
         name: name,
+        createdAt: DateTime.now(), // Store the current time
       );
       await _firestore
           .collection('users')
@@ -59,6 +69,7 @@ class HabitViewModel with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error adding habit: $e');
+      rethrow; // Optionally rethrow to handle at higher levels
     }
   }
 
@@ -70,7 +81,10 @@ class HabitViewModel with ChangeNotifier {
           .doc(_userId)
           .collection('habits')
           .doc(id)
-          .update({'name': newName});
+          .update({
+        'name': newName,
+        // 'createdAt': DateTime.now(), // Uncomment if you want to update createdAt as well
+      });
 
       final index = _habits.indexWhere((habit) => habit.id == id);
       if (index != -1) {
@@ -78,6 +92,8 @@ class HabitViewModel with ChangeNotifier {
           id: id,
           name: newName,
           isCompleted: _habits[index].isCompleted,
+          createdAt:
+              _habits[index].createdAt, // Preserve the original createdAt
         );
         notifyListeners();
       }
@@ -120,6 +136,7 @@ class HabitViewModel with ChangeNotifier {
           id: id,
           name: habit.name,
           isCompleted: !habit.isCompleted,
+          createdAt: habit.createdAt, // Preserve the original createdAt
         );
         notifyListeners();
       }
