@@ -38,12 +38,12 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.habit_tracker"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
-    }
+    applicationId = "com.example.habit_tracker"
+    minSdkVersion 23  
+    targetSdk = flutter.targetSdkVersion
+    versionCode = flutterVersionCode.toInteger()
+    versionName = flutterVersionName
+}
 
     buildTypes {
         release {
